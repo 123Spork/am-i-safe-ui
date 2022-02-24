@@ -1,0 +1,33 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "prettier"],
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "env": {
+    "es6": true,
+    "node": true,
+    "jest": true
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".ts", ".js", ".json"]
+      }
+    }
+  },
+  "rules": {
+    "prettier/prettier": ["error", {
+     "endOfLine":"auto"
+   }],
+    "@typescript-eslint/no-object-literal-type-assertion":"off",
+    "@typescript-eslint/explicit-member-accessibility": "off",
+    "@typescript-eslint/camelcase":"off"
+  }
+}
