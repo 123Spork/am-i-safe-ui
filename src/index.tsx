@@ -132,7 +132,7 @@ class Main extends React.Component {
       <Container>
         <Navbar bg="light" expand="lg">
           <Navbar.Brand href="#home">Am I Safe? </Navbar.Brand>
-          {/* <Navbar.Text>
+          <Navbar.Text>
             {' '}
             <InputGroup className="mb-2">
               <FormControl
@@ -142,7 +142,7 @@ class Main extends React.Component {
                 type="string"
               />
             </InputGroup>{' '}
-          </Navbar.Text> */}
+          </Navbar.Text>
         </Navbar>
         <Card>
           <Card.Body>
@@ -171,7 +171,7 @@ class Main extends React.Component {
                         maxLength={14}
                         id="create_password"
                         placeholder="Password"
-                        type="string"
+                        type="password"
                       />
                     </InputGroup>
                   </Col>
@@ -205,7 +205,7 @@ class Main extends React.Component {
                         maxLength={14}
                         id="send_password"
                         placeholder="Password"
-                        type="string"
+                        type="password"
                       />
                     </InputGroup>
                   </Col>

@@ -1,3 +1,3 @@
 export default {
-  ip: "localhost:1337"
+  ip: "34.147.21.22:1337"
 }

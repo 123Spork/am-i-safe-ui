@@ -14,6 +14,10 @@ To set this up you simply need to build the package and deploy the output files 
 ```
 npm run build
 ```
+## Configuring
+You can provide a default ip address for connection to a customer deployment of the am-i-safe-microservice. This is mainly for ease of use on your users but that's also possible to enter manually through the interface.
+
+In your build go to **src/config.js** and change the IP listed there.
 
 ## Todo
 Once there are a number of am-i-safe-microservice deployments out there, a useful feature will be to replace the IP manual entry field with a dropdown of approved available servers to connect to.
