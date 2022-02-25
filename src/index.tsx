@@ -107,11 +107,10 @@ class Main extends React.Component {
 
     try {
       const response = await axios.request({
-        url: `http://${ip}`,
+        url: `http://${ip}?username=${username}`,
         method: 'GET',
-        data: { username }
       })
-      this.setState({ statusMessage: response.data.timestamp })
+      this.setState({ statusMessage: `${username} said they were last safe at: ${(new Date(response.data.lastupdated).toLocaleDateString())} ${(new Date(response.data.lastupdated).toLocaleTimeString())}`})
     } catch (e) {
       this.setState({
         statusMessage: 'Check request failed.',
@@ -133,7 +132,7 @@ class Main extends React.Component {
       <Container>
         <Navbar bg="light" expand="lg">
           <Navbar.Brand href="#home">Am I Safe? </Navbar.Brand>
-          <Navbar.Text>
+          {/* <Navbar.Text>
             {' '}
             <InputGroup className="mb-2">
               <FormControl
@@ -143,7 +142,7 @@ class Main extends React.Component {
                 type="string"
               />
             </InputGroup>{' '}
-          </Navbar.Text>
+          </Navbar.Text> */}
         </Navbar>
         <Card>
           <Card.Body>
