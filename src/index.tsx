@@ -16,12 +16,42 @@ import {
 import axios from 'axios'
 import config from './config'
 
+interface MainState {
+  createTab: string
+  ipAddress: string
+  statusMessage: string
+  statusType: string
+  lastStarted?: Date
+  advancedTab?: string
+}
+
 class Main extends React.Component {
-  state: any = {
+  state: MainState = {
     createTab: 'send',
     ipAddress: config.ip,
     statusMessage: 'Do something and I will update.',
-    statusType: 'primary'
+    statusType: 'primary',
+    lastStarted: undefined
+  }
+
+  async updateAddress(event: React.ChangeEvent<HTMLInputElement>) {
+    const address = event.target.value
+    if (address === '') {
+      return
+    }
+    let lastStarted = undefined
+    try {
+      const response = await axios.request({
+        url: `http://${address}/status`,
+        method: 'GET',
+      })
+      if (response?.data?.startupTime) {
+        lastStarted = new Date(response.data.startupTime)
+      }
+    } catch (err) {
+      console.log("Failed to get status from server")
+    }
+    this.setState({ ipAddress: address, lastStarted })
   }
 
   async sendCreate() {
@@ -39,12 +69,9 @@ class Main extends React.Component {
       })
       return
     }
-    const ip = (document.getElementById(
-      'ip'
-    ) as HTMLInputElement).value || this.state.ipAddress
     try {
       await axios.request({
-        url: `http://${ip}`,
+        url: `http://${this.state.ipAddress}`,
         method: 'POST',
         data: { username, password }
       })
@@ -71,12 +98,9 @@ class Main extends React.Component {
       })
       return
     }
-    const ip = (document.getElementById(
-      'ip'
-    ) as HTMLInputElement).value || this.state.ipAddress
     try {
       await axios.request({
-        url: `http://${ip}`,
+        url: `http://${this.state.ipAddress}`,
         method: 'PUT',
         data: { username, password }
       })
@@ -101,13 +125,10 @@ class Main extends React.Component {
       })
       return
     }
-    const ip = (document.getElementById(
-      'ip'
-    ) as HTMLInputElement).value || this.state.ipAddress
 
     try {
       const response = await axios.request({
-        url: `http://${ip}?username=${username}`,
+        url: `http://${this.state.ipAddress}?username=${username}`,
         method: 'GET',
       })
       this.setState({ statusMessage: `${username} said they were last safe at: ${(new Date(response.data.lastupdated).toLocaleDateString())} ${(new Date(response.data.lastupdated).toLocaleTimeString())}`})
@@ -140,8 +161,10 @@ class Main extends React.Component {
                 id="ip"
                 placeholder={this.state.ipAddress}
                 type="string"
+                onChange={this.updateAddress.bind(this)}
               />
             </InputGroup>{' '}
+            Sever last cleared {this.state.lastStarted?.toString()}
           </Navbar.Text>
         </Navbar>
         <Card>
