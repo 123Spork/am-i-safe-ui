@@ -34,11 +34,12 @@ class Main extends React.Component {
     lastStarted: undefined
   }
 
-  async updateAddress(event: React.ChangeEvent<HTMLInputElement>) {
-    const address = event.target.value
-    if (address === '') {
-      return
-    }
+  constructor(props: any) {
+    super(props)
+    this.updateLastStarted(config.ip)
+  }
+
+  async updateLastStarted(address: string) {
     let lastStarted = undefined
     try {
       const response = await axios.request({
@@ -51,7 +52,16 @@ class Main extends React.Component {
     } catch (err) {
       console.log("Failed to get status from server")
     }
-    this.setState({ ipAddress: address, lastStarted })
+    this.setState({ lastStarted })
+  }
+
+  async updateAddress(event: React.ChangeEvent<HTMLInputElement>) {
+    const address = event.target.value
+    if (address === '') {
+      return
+    }
+    this.setState({ipAddress: address})
+    await this.updateLastStarted(address)
   }
 
   async sendCreate() {
@@ -148,6 +158,13 @@ class Main extends React.Component {
     })
   }
 
+  getClearedMessage(): string {
+    if (this.state.lastStarted) {
+      return `Server last cleared at ${this.state.lastStarted.toString()}`
+    }
+    return 'Unable to connect to server'
+  }
+
   render(): any {
     return (
       <Container>
@@ -164,7 +181,7 @@ class Main extends React.Component {
                 onChange={this.updateAddress.bind(this)}
               />
             </InputGroup>{' '}
-            Sever last cleared {this.state.lastStarted?.toString()}
+            { this.getClearedMessage() }
           </Navbar.Text>
         </Navbar>
         <Card>
