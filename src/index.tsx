@@ -38,14 +38,14 @@ class Main extends React.Component {
     try {
       const response = await axios.request({
         url: `${address}/status`,
-        method: 'GET',
+        method: 'GET'
       })
       if (response?.data?.startupTime) {
         const d = new Date(response.data.startupTime)
         return `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`
       }
     } catch (err) {
-      console.log("Failed to get status from server", err)
+      console.log('Failed to get status from server', err)
     }
     return undefined
   }
@@ -61,7 +61,7 @@ class Main extends React.Component {
       return
     }
     const lastStarted = await this.getStartupDateFromServer(address)
-    this.setState({host: address, lastStarted})
+    this.setState({ host: address, lastStarted })
   }
 
   async sendCreate() {
@@ -139,9 +139,15 @@ class Main extends React.Component {
     try {
       const response = await axios.request({
         url: `${this.state.host}?username=${username}`,
-        method: 'GET',
+        method: 'GET'
       })
-      this.setState({ statusMessage: `${username} said they were last safe at: ${(new Date(response.data.lastupdated).toLocaleDateString())} ${(new Date(response.data.lastupdated).toLocaleTimeString())}`})
+      this.setState({
+        statusMessage: `${username} said they were last safe at: ${new Date(
+          response.data.lastupdated
+        ).toLocaleDateString()} ${new Date(
+          response.data.lastupdated
+        ).toLocaleTimeString()}`
+      })
     } catch (e) {
       this.setState({
         statusMessage: 'Check request failed.',
@@ -171,31 +177,29 @@ class Main extends React.Component {
         <Navbar bg="light" expand="lg">
           <Navbar.Brand href="#home">Am I Safe? </Navbar.Brand>
           <Navbar.Collapse className="justify-content-end">
-          <Navbar.Text>
-            {' '}
-            <InputGroup className="mb-2">
-              <FormControl
-                id="ip"
-                placeholder={this.state.host}
-                type="string"
-                onChange={this.updateAddress.bind(this)}
-              />
-            </InputGroup>{' '}
-            { this.getClearedMessage() }
-          </Navbar.Text>
+            <Navbar.Text>
+              {' '}
+              <InputGroup className="mb-2">
+                <FormControl
+                  id="ip"
+                  placeholder={this.state.host}
+                  type="string"
+                  onChange={this.updateAddress.bind(this)}
+                />
+              </InputGroup>{' '}
+              {this.getClearedMessage()}
+            </Navbar.Text>
           </Navbar.Collapse>
         </Navbar>
         <Card>
-         
-            <Tabs
-              id="controlled-tab-example"
-              activeKey={this.state.advancedTab}
-              onSelect={this.flipTab.bind(this)}
-              className="mb-3"
-            >
-
-<Tab eventKey="check" title="Check for Update">
-<Card.Body>
+          <Tabs
+            id="controlled-tab-example"
+            activeKey={this.state.advancedTab}
+            onSelect={this.flipTab.bind(this)}
+            className="mb-3"
+          >
+            <Tab eventKey="check" title="Check for Update">
+              <Card.Body>
                 <Row className="align-items-center">
                   <Col xs="auto">
                     <InputGroup className="mb-2">
@@ -218,9 +222,11 @@ class Main extends React.Component {
                     </InputGroup>{' '}
                   </Col>
                 </Row>
-                </Card.Body>
-              </Tab>
-              <Tab eventKey="create" title="New User"> <Card.Body>
+              </Card.Body>
+            </Tab>
+            <Tab eventKey="create" title="New User">
+              {' '}
+              <Card.Body>
                 <Row className="align-items-center">
                   <Col xs="auto">
                     <InputGroup className="mb-2">
@@ -253,10 +259,9 @@ class Main extends React.Component {
                     </InputGroup>{' '}
                   </Col>
                 </Row>
-                </Card.Body>
-              </Tab>
-              
-              <Tab eventKey="send" title="Send Update">
+              </Card.Body>
+            </Tab>
+            <Tab eventKey="send" title="Send Update">
               <Card.Body>
                 <Row className="align-items-center">
                   <Col xs="auto">
@@ -290,11 +295,10 @@ class Main extends React.Component {
                     </InputGroup>
                   </Col>
                 </Row>
-                </Card.Body>
-              </Tab>{' '}
-              
-            </Tabs>{' '}
-            <Card.Body>
+              </Card.Body>
+            </Tab>{' '}
+          </Tabs>{' '}
+          <Card.Body>
             {' '}
             <Alert variant={this.state.statusType}>
               <Alert.Heading>Information</Alert.Heading>
