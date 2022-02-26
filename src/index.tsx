@@ -174,31 +174,17 @@ class Main extends React.Component {
   render(): any {
     return (
       <Container className="container-fluid">
-        <Navbar bg="light" expand="lg">
-          <Navbar.Brand href="#home">Am I Safe? </Navbar.Brand>
-          <Navbar.Collapse className="justify-content-end">
-            <Navbar.Text>
-              {' '}
-              <InputGroup className="mb-2">
-                <FormControl
-                  id="ip"
-                  placeholder={this.state.host}
-                  type="string"
-                  onChange={this.updateAddress.bind(this)}
-                />
-              </InputGroup>{' '}
-              {this.getClearedMessage()}
-            </Navbar.Text>
-          </Navbar.Collapse>
+        <Navbar expand="lg">
+          <Navbar.Brand>Am I Safe? </Navbar.Brand>
         </Navbar>
         <Card>
           <Tabs
-            id="controlled-tab-example"
+            id="page-tabs"
             activeKey={this.state.advancedTab}
             onSelect={this.flipTab.bind(this)}
-            className="mb-3"
+            className="mb-4"
           >
-            <Tab eventKey="check" title="Check for Update">
+            <Tab eventKey="check" title="Get Update">
               <Card.Body>
                 <Row className="align-items-center">
                   <Col xs="auto">
@@ -210,7 +196,7 @@ class Main extends React.Component {
                         type="string"
                       />
                     </InputGroup>
-                  </Col>{' '}
+                  </Col>
                   <Col xs="auto">
                     <InputGroup className="mb-2">
                       <Button
@@ -219,13 +205,12 @@ class Main extends React.Component {
                       >
                         Check
                       </Button>
-                    </InputGroup>{' '}
+                    </InputGroup>
                   </Col>
                 </Row>
               </Card.Body>
             </Tab>
             <Tab eventKey="create" title="New User">
-              {' '}
               <Card.Body>
                 <Row className="align-items-center">
                   <Col xs="auto">
@@ -256,12 +241,14 @@ class Main extends React.Component {
                       >
                         Create
                       </Button>
-                    </InputGroup>{' '}
+                    </InputGroup>
                   </Col>
                 </Row>
+            
               </Card.Body>
             </Tab>
             <Tab eventKey="send" title="Send Update">
+              {' '}
               <Card.Body>
                 <Row className="align-items-center">
                   <Col xs="auto">
@@ -295,17 +282,32 @@ class Main extends React.Component {
                     </InputGroup>
                   </Col>
                 </Row>
+             
               </Card.Body>
             </Tab>{' '}
           </Tabs>{' '}
           <Card.Body>
-            {' '}
             <Alert variant={this.state.statusType}>
               <Alert.Heading>Information</Alert.Heading>
               {this.state.statusMessage}
             </Alert>
           </Card.Body>
-        </Card>{' '}
+        </Card>
+        <br />
+        <Card>
+          <Card.Header>Server Information</Card.Header>
+          <Card.Body>
+            {this.getClearedMessage()}
+            <InputGroup className="mb-2">
+              <FormControl
+                id="ip"
+                placeholder={this.state.host}
+                type="string"
+                onChange={this.updateAddress.bind(this)}
+              />
+            </InputGroup>{' '}
+          </Card.Body>
+        </Card>
       </Container>
     )
   }

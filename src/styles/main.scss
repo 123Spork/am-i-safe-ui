@@ -1,15 +1,7 @@
 @import '~bootstrap/scss/bootstrap';
 
-#root {
-  display: block;
-  position: relative;
-  width: 100%;
-  height: 100%;
-  margin-top: 20px;
+
+
+.nav-link{
+  padding: 8px !important;
 }
-
-.navbar {
-  padding:8px; 
-}
-
-
