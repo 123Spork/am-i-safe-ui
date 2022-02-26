@@ -34,24 +34,23 @@ class Main extends React.Component {
     lastStarted: undefined
   }
 
-  constructor(props: any) {
-    super(props)
-    this.updateLastStarted(config.ip)
-  }
-
-  async updateLastStarted(address: string) {
-    let lastStarted = undefined
+  async getStartupDateFromServer(address: string) {
     try {
       const response = await axios.request({
         url: `http://${address}/status`,
         method: 'GET',
       })
       if (response?.data?.startupTime) {
-        lastStarted = new Date(response.data.startupTime)
+        return new Date(response.data.startupTime)
       }
     } catch (err) {
-      console.log("Failed to get status from server")
+      console.log("Failed to get status from server", err)
     }
+    return undefined
+  }
+
+  async componentDidMount() {
+    const lastStarted = await this.getStartupDateFromServer(config.ip)
     this.setState({ lastStarted })
   }
 
@@ -60,8 +59,8 @@ class Main extends React.Component {
     if (address === '') {
       return
     }
-    this.setState({ipAddress: address})
-    await this.updateLastStarted(address)
+    const lastStarted = await this.getStartupDateFromServer(address)
+    this.setState({ipAddress: address, lastStarted})
   }
 
   async sendCreate() {
