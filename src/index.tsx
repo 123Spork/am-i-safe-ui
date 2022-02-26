@@ -175,7 +175,7 @@ class Main extends React.Component {
     return (
       <Container className="container-fluid">
         <Navbar expand="lg">
-          <Navbar.Brand>Am I Safe? </Navbar.Brand>
+          <Navbar.Brand className="page-title">Am I Safe? </Navbar.Brand>
         </Navbar>
         <Card>
           <Tabs
@@ -211,7 +211,7 @@ class Main extends React.Component {
               </Card.Body>
             </Tab>
             <Tab eventKey="create" title="New User">
-              <Card.Body>
+              <Card.Body>                    
                 <Row className="align-items-center">
                   <Col xs="auto">
                     <InputGroup className="mb-2">

@@ -1,7 +1,15 @@
 @import '~bootstrap/scss/bootstrap';
 
-
+#app{
+  max-width: 640px;
+  margin:0px auto;
+}
 
 .nav-link{
   padding: 8px !important;
+}
+
+.page-title{
+  font-size: 40px;
+  font-weight: bolder;
 }
