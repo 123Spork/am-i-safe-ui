@@ -19,6 +19,7 @@ import config from './config'
 interface MainState {
   createTab: string
   host: string
+  language: string
   statusMessage: string
   statusType: string
   lastStarted?: Date
@@ -29,7 +30,8 @@ class Main extends React.Component {
   state: MainState = {
     createTab: 'send',
     host: config.host,
-    statusMessage: 'Do something and I will update.',
+    language: config.defaultLanguage,
+    statusMessage: config.languages[config.defaultLanguage].information.default,
     statusType: 'primary',
     lastStarted: undefined
   }
@@ -45,7 +47,7 @@ class Main extends React.Component {
         return `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`
       }
     } catch (err) {
-      console.log('Failed to get status from server', err)
+      console.log(config.languages[this.state.language].server.serverError, err)
     }
     return undefined
   }
@@ -65,7 +67,12 @@ class Main extends React.Component {
   }
 
   async sendCreate() {
-    this.setState({ statusMessage: 'Creating', statusType: 'primary' })
+    this.setState({
+      statusMessage:
+        config.languages[this.state.language].information
+          .newUserProgressMessage,
+      statusType: 'primary'
+    })
 
     const username = (document.getElementById('create_id') as HTMLInputElement)
       .value
@@ -74,7 +81,9 @@ class Main extends React.Component {
     ) as HTMLInputElement).value
     if (username.length < 1 || password.length < 1) {
       this.setState({
-        statusMessage: 'You must fill both username and password fields.',
+        statusMessage:
+          config.languages[this.state.language].information
+            .newUserValidationError,
         statusType: 'warning'
       })
       return
@@ -85,17 +94,27 @@ class Main extends React.Component {
         method: 'POST',
         data: { username, password }
       })
-      this.setState({ statusMessage: 'User created', statusType: 'success' })
+      this.setState({
+        statusMessage:
+          config.languages[this.state.language].information.newUsersSuccess,
+        statusType: 'success'
+      })
     } catch (e) {
       this.setState({
-        statusMessage: 'Create request failed.',
+        statusMessage:
+          config.languages[this.state.language].information.newUserFail,
         statusType: 'danger'
       })
     }
   }
 
   async sendStatus() {
-    this.setState({ statusMessage: 'Sending', statusType: 'primary' })
+    this.setState({
+      statusMessage:
+        config.languages[this.state.language].information
+          .sendUpdateProgressMessage,
+      statusType: 'primary'
+    })
     const username = (document.getElementById('send_id') as HTMLInputElement)
       .value
     const password = (document.getElementById(
@@ -103,7 +122,9 @@ class Main extends React.Component {
     ) as HTMLInputElement).value
     if (username.length < 1 || password.length < 1) {
       this.setState({
-        statusMessage: 'You must fill both username and password fields.',
+        statusMessage:
+          config.languages[this.state.language].information
+            .sendUpdateValidationError,
         statusType: 'warning'
       })
       return
@@ -114,23 +135,35 @@ class Main extends React.Component {
         method: 'PUT',
         data: { username, password }
       })
-      this.setState({ statusMessage: 'Status updated', statusType: 'success' })
+      this.setState({
+        statusMessage:
+          config.languages[this.state.language].information.sendUpdateSuccess,
+        statusType: 'success'
+      })
     } catch (e) {
       this.setState({
-        statusMessage: 'Update request failed.',
+        statusMessage:
+          config.languages[this.state.language].information.sendUpdateFail,
         statusType: 'danger'
       })
     }
   }
 
   async checkStatus() {
-    this.setState({ statusMessage: 'Checking', statusType: 'primary' })
+    this.setState({
+      statusMessage:
+        config.languages[this.state.language].information
+          .getUpdateProgressMessage,
+      statusType: 'primary'
+    })
 
     const username = (document.getElementById('check_id') as HTMLInputElement)
       .value
     if (username.length < 1) {
       this.setState({
-        statusMessage: 'You must fill the username field.',
+        statusMessage:
+          config.languages[this.state.language].information
+            .getUpdateValidationError,
         statusType: 'warning'
       })
       return
@@ -142,7 +175,9 @@ class Main extends React.Component {
         method: 'GET'
       })
       this.setState({
-        statusMessage: `${username} said they were last safe at: ${new Date(
+        statusMessage: `${username} ${
+          config.languages[this.state.language].information.getUpdateSuccess
+        } ${new Date(
           response.data.lastupdated
         ).toLocaleDateString()} ${new Date(
           response.data.lastupdated
@@ -150,7 +185,8 @@ class Main extends React.Component {
       })
     } catch (e) {
       this.setState({
-        statusMessage: 'Check request failed.',
+        statusMessage:
+          config.languages[this.state.language].information.getUpdateFail,
         statusType: 'danger'
       })
     }
@@ -159,24 +195,53 @@ class Main extends React.Component {
   flipTab() {
     this.setState({
       createTab: this.state.createTab == 'create' ? 'send' : 'create',
-      statusMessage: 'Do something and I will update.',
+      statusMessage: config.languages[this.state.language].information.default,
       statusType: 'primary'
     })
   }
 
   getClearedMessage(): string {
     if (this.state.lastStarted) {
-      return `Server last cleared at ${this.state.lastStarted.toString()}`
+      return `${
+        config.languages[this.state.language].server.statusMessage
+      } ${this.state.lastStarted.toString()}`
     }
-    return 'Unable to connect to server'
+    return config.languages[this.state.language].server.serverError
+  }
+
+  changeLanguageUK() {
+    this.setState({
+      language: 'uk',
+      statusMessage:
+        config.languages['uk'].information.default
+    })
+  }
+
+  changeLanguageUA() {
+    this.setState({
+      language: 'ua',
+      statusMessage:
+        config.languages['ua'].information.default
+    })
   }
 
   render(): any {
     return (
       <Container className="container-fluid">
         <Navbar expand="lg">
-          <Navbar.Brand className="page-title">Am I Safe? </Navbar.Brand>
+          <Navbar.Brand className="page-title">
+            {config.languages[this.state.language].siteHeader}
+          </Navbar.Brand>
         </Navbar>
+
+        <div className="language-container">
+          <a href="#" onClick={this.changeLanguageUA.bind(this)}>
+            <img className="language-flag" src="./ua.png" />
+          </a>
+          <a href="#" onClick={this.changeLanguageUK.bind(this)}>
+            <img className="language-flag" src="./uk.png" />
+          </a>
+        </div>
         <Card>
           <Tabs
             id="page-tabs"
@@ -184,7 +249,10 @@ class Main extends React.Component {
             onSelect={this.flipTab.bind(this)}
             className="mb-4"
           >
-            <Tab eventKey="check" title="Get Update">
+            <Tab
+              eventKey="check"
+              title={config.languages[this.state.language].tabs.getUpdate}
+            >
               <Card.Body>
                 <Row className="align-items-center">
                   <Col xs="auto">
@@ -192,7 +260,9 @@ class Main extends React.Component {
                       <FormControl
                         maxLength={14}
                         id="check_id"
-                        placeholder="Username"
+                        placeholder={
+                          config.languages[this.state.language].inputs.username
+                        }
                         type="string"
                       />
                     </InputGroup>
@@ -203,22 +273,30 @@ class Main extends React.Component {
                         variant="success"
                         onClick={this.checkStatus.bind(this)}
                       >
-                        Check
+                        {
+                          config.languages[this.state.language].buttons
+                            .getUpdate
+                        }
                       </Button>
                     </InputGroup>
                   </Col>
                 </Row>
               </Card.Body>
             </Tab>
-            <Tab eventKey="create" title="New User">
-              <Card.Body>                    
+            <Tab
+              eventKey="create"
+              title={config.languages[this.state.language].tabs.newUser}
+            >
+              <Card.Body>
                 <Row className="align-items-center">
                   <Col xs="auto">
                     <InputGroup className="mb-2">
                       <FormControl
                         maxLength={14}
                         id="create_id"
-                        placeholder="Username"
+                        placeholder={
+                          config.languages[this.state.language].inputs.username
+                        }
                         type="string"
                       />
                     </InputGroup>
@@ -228,7 +306,9 @@ class Main extends React.Component {
                       <FormControl
                         maxLength={14}
                         id="create_password"
-                        placeholder="Password"
+                        placeholder={
+                          config.languages[this.state.language].inputs.password
+                        }
                         type="password"
                       />
                     </InputGroup>
@@ -239,15 +319,17 @@ class Main extends React.Component {
                         variant="success"
                         onClick={this.sendCreate.bind(this)}
                       >
-                        Create
+                        {config.languages[this.state.language].buttons.newUser}
                       </Button>
                     </InputGroup>
                   </Col>
                 </Row>
-            
               </Card.Body>
             </Tab>
-            <Tab eventKey="send" title="Send Update">
+            <Tab
+              eventKey="send"
+              title={config.languages[this.state.language].tabs.sendUpdate}
+            >
               {' '}
               <Card.Body>
                 <Row className="align-items-center">
@@ -256,7 +338,9 @@ class Main extends React.Component {
                       <FormControl
                         maxLength={14}
                         id="send_id"
-                        placeholder="Username"
+                        placeholder={
+                          config.languages[this.state.language].inputs.username
+                        }
                         type="string"
                       />
                     </InputGroup>
@@ -266,7 +350,9 @@ class Main extends React.Component {
                       <FormControl
                         maxLength={14}
                         id="send_password"
-                        placeholder="Password"
+                        placeholder={
+                          config.languages[this.state.language].inputs.password
+                        }
                         type="password"
                       />
                     </InputGroup>
@@ -277,25 +363,31 @@ class Main extends React.Component {
                         variant="success"
                         onClick={this.sendStatus.bind(this)}
                       >
-                        I am Safe
+                        {
+                          config.languages[this.state.language].buttons
+                            .sendUpdate
+                        }
                       </Button>
                     </InputGroup>
                   </Col>
                 </Row>
-             
               </Card.Body>
             </Tab>{' '}
           </Tabs>{' '}
           <Card.Body>
             <Alert variant={this.state.statusType}>
-              <Alert.Heading>Information</Alert.Heading>
+              <Alert.Heading>
+                {config.languages[this.state.language].information.header}
+              </Alert.Heading>
               {this.state.statusMessage}
             </Alert>
           </Card.Body>
         </Card>
         <br />
         <Card>
-          <Card.Header>Server Information</Card.Header>
+          <Card.Header>
+            {config.languages[this.state.language].server.header}
+          </Card.Header>
           <Card.Body>
             {this.getClearedMessage()}
             <InputGroup className="mb-2">

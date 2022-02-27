@@ -48,12 +48,6 @@ var config = {
       template: './src/index.html'
     })
   ],
-  devServer: {
-    contentBase: path.join(__dirname, 'src'),
-    contentBasePublicPath: '/',
-    historyApiFallback: true,
-    hot: true
-  },
   optimization: {
     minimize: false
   }

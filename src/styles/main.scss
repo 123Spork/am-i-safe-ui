@@ -1,15 +1,104 @@
 @import '~bootstrap/scss/bootstrap';
 
-#app{
-  max-width: 640px;
-  margin:0px auto;
+body,
+input {
+  @extend .bg-dark;
+  color: white !important;
 }
 
-.nav-link{
+input {
+  border: 1px solid $gray-600 !important;
+}
+
+.card {
+  @extend .bg-dark;
+  background-color: $gray-800 !important;
+  border: 1px solid $gray-800;
+  color: $light;
+}
+
+.card-header {
+  background-color: $gray-700 !important;
+}
+
+.nav-tabs {
+  margin-top: -2px;
+  padding-bottom: 1px;
+  padding-left: 1px;
+  margin-left: -2px;
+  width: calc(100% + 4px);
+  background-color: $dark !important;
+  border: 0px solid $gray-700 !important;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.nav-item {
+  width: calc(33% - 4px);
+  margin-right: 2px;
+}
+
+.nav-link {
+  background-color: $gray-700 !important;
+  border: 0px solid $gray-700 !important;
+  color: $light;
+  width: 100%;
+  &:hover {
+    background-color: $gray-600 !important;
+    color: $gray-400 !important;
+  }
+  &.active {
+    background-color: $gray-400 !important;
+    color: $dark !important;
+  }
+
+  font-size: 14px;
+}
+
+.page-title {
+  color: $light !important;
+  text-align: center;
+  width: 100%;
+}
+
+.language-container {
+  background-color: transparent !important;
+  border: 0px !important;
+  display: block;
+  width: 100%;
+  float: left;
+  padding-bottom: 8px;
+  height: 30px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.language-flag {
+  height: 25px;
+  width: 35px;
+  margin-left: 2px;
+  margin-right: 2px;
+  padding-bottom: 5px;
+}
+
+#app {
+  max-width: 640px;
+  margin: 0px auto;
+}
+
+.nav-link {
   padding: 8px !important;
 }
 
-.page-title{
+.page-title {
   font-size: 40px;
+  height: 40px;
+  line-height: 40px;
   font-weight: bolder;
 }
