@@ -1,13 +1,16 @@
 interface Language {
   siteHeader: string
+  instructions: {
+    header: string
+    getUpdate: string
+    sendUpdate: string
+  }
   tabs: {
     getUpdate: string
-    newUser: string
     sendUpdate: string
   }
   buttons: {
     getUpdate: string
-    newUser: string
     sendUpdate: string
   }
   inputs: { username: string; password: string }
@@ -16,16 +19,16 @@ interface Language {
     default: string
     getUpdateProgressMessage: string
     getUpdateValidationError: string
+    createUserSuccess: string
     getUpdateSuccess: string
-    getUpdateFail: string
-    newUserProgressMessage: string
-    newUserValidationError: string
-    newUsersSuccess: string
-    newUserFail: string
+    getUpdate500Fail: string
+    getUpdate404Fail: string
     sendUpdateProgressMessage: string
     sendUpdateValidationError: string
     sendUpdateSuccess: string
-    sendUpdateFail: string
+    sendUpdate500Fail: string
+    sendUpdate400Fail: string
+    sendUpdate401Fail: string
   }
   server: {
     header: string
@@ -47,16 +50,21 @@ export default {
   defaultLanguage: 'ua',
   languages: {
     uk: {
+      instructions: {
+        header: 'Instructions',
+        getUpdate:
+          "To check the safety of your loved one, simply enter their username in the field above and click the 'Check' button.",
+        sendUpdate:
+          "To send an update on your own safety, enter a username and a password above and click the 'I Am Safe' button. If you do not have an account this will create one for you. If you already have an account this will update your status."
+      },
       siteHeader: 'Am I Safe?',
       tabs: {
         getUpdate: 'Get Update',
-        newUser: 'New User',
         sendUpdate: 'Send Update'
       },
       inputs: { username: 'Username', password: 'Password' },
       buttons: {
         getUpdate: 'Check',
-        newUser: 'Create',
         sendUpdate: 'I am Safe'
       },
       information: {
@@ -65,18 +73,19 @@ export default {
         getUpdateProgressMessage: 'Checking',
         getUpdateValidationError: 'You must fill the username field.',
         getUpdateSuccess: 'said they were last safe at:',
-        getUpdateFail: 'Check request failed.',
-        newUserProgressMessage: 'Creating',
-
-        newUserValidationError:
-          'You must fill both username and password fields.',
-        newUsersSuccess: 'User created',
-        newUserFail: 'Create request failed.',
+        getUpdate500Fail: 'Check request failed.',
+        getUpdate404Fail:
+          'That username has not been found. This could be because the server reset recently. See the date in the server information below for the last time the server was reset.',
         sendUpdateProgressMessage: 'Sending',
         sendUpdateValidationError:
           'You must fill both username and password fields.',
+        createUserSuccess: 'Created new user and updated status.',
         sendUpdateSuccess: 'Status updated.',
-        sendUpdateFail: 'Update request failed.'
+        sendUpdate500Fail: 'Update request failed.',
+        sendUpdate400Fail:
+          'Request failed because the wrong information was sent. Please check you have filled the username and password fields.',
+        sendUpdate401Fail:
+          'A user already exists with this username and you have entered the wrong password.'
       },
       server: {
         header: 'Server Information',
@@ -85,6 +94,13 @@ export default {
       }
     },
     ua: {
+      instructions: {
+        header: 'Інструкції',
+        getUpdate:
+          'Щоб перевірити безпеку свого коханого, просто введіть його ім’я користувача в поле вище та натисніть кнопку «Перевірити».',
+        sendUpdate:
+          'Щоб надіслати оновлення щодо власної безпеки, введіть ім’я користувача та пароль вище та натисніть кнопку «Я в безпеці». Якщо у вас немає облікового запису, це створить його для вас. Якщо у вас уже є обліковий запис, це оновить ваш статус.'
+      },
       siteHeader: 'Чи я в безпеці?',
       tabs: {
         getUpdate: 'Отримати оновлення',
@@ -101,19 +117,22 @@ export default {
         header: 'Інформація',
         default: 'Зробіть щось, і я оновлю.',
         getUpdateProgressMessage: 'Перевірка',
-        getUpdateValidationError: 'Ви повинні заповнити поле імені користувача.',
+        getUpdateValidationError:
+          'Ви повинні заповнити поле імені користувача.',
+        createUserSuccess: 'Створено нового користувача та оновлено статус.',
         getUpdateSuccess: 'сказали, що востаннє були в безпеці в:',
-        getUpdateFail: 'Не вдалося перевірити запит.',
-        newUserProgressMessage: 'Створення',
-        newUserValidationError:
-          'Ви повинні заповнити поля імені користувача та пароля.',
-        newUsersSuccess: 'Користувач створений',
-        newUserFail: 'Не вдалося створити запит.',
+        getUpdate500Fail: 'Не вдалося перевірити запит.',
+        getUpdate404Fail:
+          'Це ім’я користувача не знайдено. Це може бути тому, що сервер нещодавно скинувся. Перегляньте дату останнього скидання сервера в наведеній нижче інформації про сервер.',
         sendUpdateProgressMessage: 'Відправлення',
         sendUpdateValidationError:
           'Ви повинні заповнити поля імені користувача та пароля.',
         sendUpdateSuccess: 'Статус оновлено.',
-        sendUpdateFail: 'Помилка запиту на оновлення.'
+        sendUpdate500Fail: 'Помилка запиту на оновлення.',
+        sendUpdate400Fail:
+          'Запит не виконано, оскільки надіслано неправильну інформацію. Будь ласка, переконайтеся, що ви заповнили поля імені користувача та пароля.',
+        sendUpdate401Fail:
+          'Користувач уже існує з цим іменем користувача, і ви ввели неправильний пароль.'
       },
       server: {
         header: 'Інформація про сервер',
