@@ -70,6 +70,33 @@ input {
   height:84px;
 }
 
+.btn-copy-url{
+  width:calc(30% - 10px);
+  margin-top:-4px;
+  display:inline-block
+}
+
+.input-copy-url{
+  width:70%; 
+  display:inline-block; 
+  margin-right:5px;
+}
+
+@media only screen and (max-width: 520px) {
+  .btn-copy-url{
+    clear:both;
+    display:block;
+    width:40%;
+    margin-top:4px;
+  }
+
+  .input-copy-url{
+    clear:both;
+    display:block;
+    width:100%;
+  }
+}
+
 .language-container {
   background-color: transparent !important;
   border: 0px !important;

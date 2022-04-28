@@ -43,8 +43,9 @@ class Main extends React.Component {
         method: 'GET'
       })
       if (response?.data?.startupTime) {
-        const d = new Date(response.data.startupTime)
-        return `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`
+        const tzoffset = (new Date()).getTimezoneOffset() * 60000
+        const d = new Date(response.data.startupTime - tzoffset)      
+        return `${(d.toISOString().slice(0, -5).replace('T',' '))}`
       }
     } catch (err) {
       console.log(config.languages[this.state.language].server.serverError, err)
@@ -55,6 +56,12 @@ class Main extends React.Component {
   async componentDidMount() {
     const lastStarted = await this.getStartupDateFromServer(config.host)
     this.setState({ lastStarted })
+
+    const queryString = new URLSearchParams(window.location.search);
+    if(queryString.get('id')){
+      (document.getElementById('check_id') as HTMLInputElement).value = queryString.get('id') as string
+      await this.checkStatus()
+    }
   }
 
   async updateAddress(event: React.ChangeEvent<HTMLInputElement>) {
@@ -91,7 +98,6 @@ class Main extends React.Component {
         method: 'POST',
         data: { username, password }
       })
-      debugger;
       switch (response.status) {
         default:
           this.setState({
@@ -165,14 +171,20 @@ class Main extends React.Component {
         url: `${this.state.host}?username=${username}`,
         method: 'GET'
       })
+      const tzoffset = (new Date()).getTimezoneOffset() * 60000
+      const d = new Date(response.data.lastupdated - tzoffset)
+      const url = `http://www.amisafe.info?id=${username}`
+      const copyMessage =  config.languages[this.state.language].buttons.copyUrl
+      const copiedMessage =  config.languages[this.state.language].buttons.copiedUrl
+
+
       this.setState({
         statusMessage: `${username} ${
           config.languages[this.state.language].information.getUpdateSuccess
-        } ${new Date(
-          response.data.lastupdated
-        ).toLocaleDateString()} ${new Date(
-          response.data.lastupdated
-        ).toLocaleTimeString()}`
+        }<br/><b>${(d.toISOString().slice(0, -5).replace('T',' '))}</b>
+        <br/><br/> ${config.languages[this.state.language].information.getUpdateURL}<br/>
+        <input class="form-control input-copy-url" value="${url}"/>
+        <a type="button" class="btn btn-success btn-copy-url" onClick="navigator.clipboard.writeText('${url}'); this.innerHTML='${copiedMessage}'">${copyMessage}</a>`
       })
     } catch (e) {
       switch ((e as any).response.status as number) {
@@ -228,6 +240,7 @@ class Main extends React.Component {
   }
 
   render(): any {
+    const innerhtml = {__html:this.state.statusMessage}
     return (
       <Container className="container-fluid">
         <Navbar expand="lg">
@@ -337,7 +350,7 @@ class Main extends React.Component {
               <Alert.Heading>
                 {config.languages[this.state.language].information.header}
               </Alert.Heading>
-              {this.state.statusMessage}
+              <div dangerouslySetInnerHTML={innerhtml}></div>
             </Alert>
           </Card.Body>
         </Card>

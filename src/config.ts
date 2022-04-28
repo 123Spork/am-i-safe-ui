@@ -12,6 +12,8 @@ interface Language {
   buttons: {
     getUpdate: string
     sendUpdate: string
+    copyUrl: string
+    copiedUrl: string
   }
   inputs: { username: string; password: string }
   information: {
@@ -21,6 +23,7 @@ interface Language {
     getUpdateValidationError: string
     createUserSuccess: string
     getUpdateSuccess: string
+    getUpdateURL: string
     getUpdate500Fail: string
     getUpdate404Fail: string
     sendUpdateProgressMessage: string
@@ -65,7 +68,9 @@ export default {
       inputs: { username: 'Username', password: 'Password' },
       buttons: {
         getUpdate: 'Check',
-        sendUpdate: 'I am Safe'
+        sendUpdate: 'I am Safe',
+        copyUrl: 'Copy',
+        copiedUrl: 'Copied',
       },
       information: {
         header: 'Information',
@@ -73,6 +78,7 @@ export default {
         getUpdateProgressMessage: 'Checking',
         getUpdateValidationError: 'You must fill the username field.',
         getUpdateSuccess: 'said they were last safe at:',
+        getUpdateURL: 'You can check this status again in future by using this link:',
         getUpdate500Fail: 'Check request failed.',
         getUpdate404Fail:
           'That username has not been found. This could be because the server reset recently. See the date in the server information below for the last time the server was reset.',
@@ -97,7 +103,7 @@ export default {
       instructions: {
         header: 'Інструкції',
         getUpdate:
-          'Щоб перевірити безпеку свого коханого, просто введіть його ім’я користувача в поле вище та натисніть кнопку «Перевірити».',
+          'Щоб перевірити безпеку близької людини, просто введіть їхнє ім’я користувача в поле вище та натисніть кнопку «Перевірте».',
         sendUpdate:
           'Щоб надіслати оновлення щодо власної безпеки, введіть ім’я користувача та пароль вище та натисніть кнопку «Я в безпеці». Якщо у вас немає облікового запису, це створить його для вас. Якщо у вас уже є обліковий запис, це оновить ваш статус.'
       },
@@ -111,7 +117,9 @@ export default {
       buttons: {
         getUpdate: 'Перевірте',
         newUser: 'Створюйте',
-        sendUpdate: 'Я в безпеці'
+        sendUpdate: 'Я в безпеці',
+        copyUrl: 'копія',
+        copiedUrl: 'скопійовано',
       },
       information: {
         header: 'Інформація',
@@ -121,6 +129,7 @@ export default {
           'Ви повинні заповнити поле імені користувача.',
         createUserSuccess: 'Створено нового користувача та оновлено статус.',
         getUpdateSuccess: 'сказали, що востаннє були в безпеці в:',
+        getUpdateURL: 'Ви можете знову перевірити цей статус у майбутньому за цим посиланням:',
         getUpdate500Fail: 'Не вдалося перевірити запит.',
         getUpdate404Fail:
           'Це ім’я користувача не знайдено. Це може бути тому, що сервер нещодавно скинувся. Перегляньте дату останнього скидання сервера в наведеній нижче інформації про сервер.',
